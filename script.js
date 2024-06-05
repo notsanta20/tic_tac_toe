@@ -15,7 +15,7 @@ function GameBoard(){
   return { createBoard, printBoard, getBoard};
 };
 
-function GameController(symbol = `X`){
+function GameController(playerSymbol){
   const btnContainer = document.querySelector(`.btn-container`);
   const result = document.querySelector(`.result`);
   const resultText = document.querySelector(`.result-text`);
@@ -25,15 +25,15 @@ function GameController(symbol = `X`){
   let round = 0;
   const gameBoard = GameBoard();
   gameBoard.createBoard();
-
+  const test = playerSymbol;
   const players = [
     {
       Name : `User`,
-      symbol : symbol
+      symbol : test
     },
     {
       Name : `Computer`,
-      symbol : symbol == `X` ? `O` : `X`
+      symbol : test == `X` ? `O` : `X`
     }
   ];
 
@@ -170,12 +170,13 @@ function GameStart(){
       symbol = button.value;
       modal.close();
       start.style.display = `none`;
-      main.style.display = `flex`;
+      main.style.display = `grid`;
       header.textContent = `TIC TAC TOE`;
+      GameController(symbol);
     });
   })
 
-  GameController(symbol);
+  
 
 };
 
