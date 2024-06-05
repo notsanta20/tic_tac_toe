@@ -6,14 +6,36 @@
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap" rel="stylesheet">
   <title>Tic Tac Toe</title>
 </head>
 <body>
   <div class="container">
     <header class="header"></header>
-    <div class="btn-container"></div>
-    <footer class="footer"></footer>
+    <div class="start">
+      <div class="heading">WELCOME TO TIC TAC TOE</div>
+      <button class="play-btn">New game</button>
+      <dialog class="modal">
+        <form action="" class="form">
+          <label>Select your Side</label>
+          <div class="symbols">
+            <input type="button" class="symbol-btn" value="X">
+            <input type="button" class="symbol-btn" value="O">
+          </div>
+        </form>
+      </dialog>
+    </div>
+    <main class="main">
+      <div class="btn-container"></div>
+      <div class="result">
+        <div class="result-text">Test</div>
+        <button class="play-again-btn">Play Again</button>
+      </div>
+    </main>
+    <footer class="footer">
+      <p>© 2024 Santa</p>
+      <a href="" class="link">Source Code</a>
+    </footer>
   </div>
   <script src="script.js"></script>
 </body>

@@ -4,7 +4,7 @@ function GameBoard(){
 
   const createBoard = () => {
     for(let i = 0; i < size; i++){
-      board.push(``);
+      board[i] = ``;
     };
   };
 
@@ -15,7 +15,12 @@ function GameBoard(){
   return { createBoard, printBoard, getBoard};
 };
 
-function GameController(player1 = `User`, player2 = `Computer`, symbol = `X`){
+function GameController(symbol = `X`){
+  const btnContainer = document.querySelector(`.btn-container`);
+  const result = document.querySelector(`.result`);
+  const resultText = document.querySelector(`.result-text`);
+  const playAgainBtn = document.querySelector(`.play-again-btn`);
+
   let winner = false;
   let round = 0;
   const gameBoard = GameBoard();
@@ -23,12 +28,12 @@ function GameController(player1 = `User`, player2 = `Computer`, symbol = `X`){
 
   const players = [
     {
-      Name : player1,
+      Name : `User`,
       symbol : symbol
     },
     {
-      Name : player2,
-      symbol : symbol === `X` ? `O` : `X`
+      Name : `Computer`,
+      symbol : symbol == `X` ? `O` : `X`
     }
   ];
 
@@ -77,13 +82,28 @@ function GameController(player1 = `User`, player2 = `Computer`, symbol = `X`){
       if(gameBoard.getBoard[firstVal] !== `` && gameBoard.getBoard[secondVal] !== `` && gameBoard.getBoard[thirdVal] !== `` ){
         if(gameBoard.getBoard[firstVal] === gameBoard.getBoard[secondVal] && gameBoard.getBoard[secondVal] === gameBoard.getBoard[thirdVal]){
           winner = true;
-          activePlayer === players[1] ? console.log(`You Won!!!`) : console.log(`Computer Won!!!`);
+          activePlayer === players[1] ? resultText.textContent = `You Won!!!` : resultText.textContent = `Computer Won!!!`;
         }
       }
       }
     );
+
+    if(winner){playAgain()};
   };
 
+  const playAgain = () => {
+    result.style.visibility = `visible`;
+    playAgainBtn.addEventListener(`click`, () => {
+      round = 0;
+      winner = false;
+      activePlayer = players[0];
+      gameBoard.createBoard();
+      render();
+      result.style.visibility = `hidden`;
+    });
+  }
+
+  
   const playRound = (click) => {
     if(!winner){
       if(round < 9){
@@ -100,7 +120,8 @@ function GameController(player1 = `User`, player2 = `Computer`, symbol = `X`){
         }
       }
       else{
-        console.log(`Its a Tie`);
+        resultText.textContent = `Its a Tie`;
+        playAgain();
         return;
       }
     }
@@ -109,9 +130,6 @@ function GameController(player1 = `User`, player2 = `Computer`, symbol = `X`){
     }
   };
   
-  const btnContainer = document.querySelector(`.btn-container`);
-
-
   function render () {
     btnContainer.innerHTML = ``;
     gameBoard.getBoard.forEach((cell, index) => {
@@ -119,13 +137,46 @@ function GameController(player1 = `User`, player2 = `Computer`, symbol = `X`){
       btnContainer.appendChild(button);
       button.classList.add(`btn`)
       button.textContent = cell;
-      button.addEventListener(`click`, ()=>{
-        playRound(index);
-      })
+      if(!winner){
+        if(round < 9){
+          button.addEventListener(`click`, ()=>{
+            playRound(index);
+          });
+        }
+      }
     });
   };
 
   render();
 };
 
-GameController();
+function GameStart(){
+  const main = document.querySelector(`.main`);
+  const start = document.querySelector(`.start`);
+  const playBtn = document.querySelector(`.play-btn`);
+  const modal = document.querySelector(`.modal`);
+  const symbolBtn = document.querySelectorAll(`.symbol-btn`);
+  const header = document.querySelector(`.header`);
+  let symbol;
+
+  main.style.display = `none`;
+
+  playBtn.addEventListener(`click`, () => {
+    modal.showModal();
+  });
+
+  symbolBtn.forEach((button) => {
+    button.addEventListener(`click`, () => {
+      symbol = button.value;
+      modal.close();
+      start.style.display = `none`;
+      main.style.display = `flex`;
+      header.textContent = `TIC TAC TOE`;
+    });
+  })
+
+  GameController(symbol);
+
+};
+
+GameStart();
