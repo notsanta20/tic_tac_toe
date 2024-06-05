@@ -14,19 +14,46 @@ body{
   justify-content: center;
   align-items: center;
   height: 100vh;
+
 }
 
 .btn-container{
+  aspect-ratio : 1 / 1;
   width: 500px;
-  height: 500px;
   display: grid;
   grid-template: repeat(3, 1fr) / repeat(3, 1fr);
-  gap: 5px;
+  gap: 10px;
   background-color: rgb(66, 66, 66);
-  padding: 5px;
+  padding: 10px;
+  border-radius: 10px;
 }
 
-.btns{
-  font-size: 1.5rem;
+.btn{
+  font-size: 5rem;
+  font-weight: 700;
+  border-radius: 10px;
+  border: 0px;
+}
+
+/* MOBILE STYLING */
+
+@media only screen and (max-width: 600px){
+
+  .btn-container{
+    width: 80%;
+    display: grid;
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+    gap: 7px;
+    background-color: rgb(66, 66, 66);
+    padding: 7px;
+    border-radius: 10px;
+  }
+  
+  .btn{
+    font-size: 4rem;
+    font-weight: 700;
+    border-radius: 10px;
+    border: 0px;
+  }
 
 }

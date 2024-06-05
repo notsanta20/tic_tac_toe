@@ -2,30 +2,24 @@ function GameBoard(){
   const size = 9;
   const board = [];
 
-  for(let i = 0; i < size; i++){
-    board.push(0);
+  const createBoard = () => {
+    for(let i = 0; i < size; i++){
+      board.push(``);
+    };
   };
 
   const getBoard = board;
 
   const printBoard = () => console.log(board);
 
-  const changeValue = (index, symbol) => {
-    if(board[index] === 0){
-      board[index] = symbol;
-    }
-    else{
-      console.log(`Slot is already Take`);
-      
-    }
-  };
-
-  return { printBoard, changeValue, getBoard};
+  return { createBoard, printBoard, getBoard};
 };
 
 function GameController(player1 = `User`, player2 = `Computer`, symbol = `X`){
   let winner = false;
+  let round = 0;
   const gameBoard = GameBoard();
+  gameBoard.createBoard();
 
   const players = [
     {
@@ -42,18 +36,22 @@ function GameController(player1 = `User`, player2 = `Computer`, symbol = `X`){
 
   const switchPlayer= () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
-    console.log(`${activePlayer.Name}'s Turn`);
-  };
-
-  const playerValue = () => {
-    let playerIndex = prompt(`Enter cell Value between 1 - 9`);
-    playerIndex = Number(playerIndex)
-    return playerIndex - 1;
   };
 
   const computerValue = () => {
     const computerIndex = Math.floor(Math.random() * 9);
     return computerIndex;
+  };
+
+  const changeValue = (index, symbol) => {
+    if(gameBoard.getBoard[index] === ``){
+      gameBoard.getBoard[index] = symbol;
+      switchPlayer();
+      round ++;
+    }
+    else{
+      playRound();
+    }
   };
 
   const getWinner = () => {
@@ -76,39 +74,58 @@ function GameController(player1 = `User`, player2 = `Computer`, symbol = `X`){
       secondVal = pattern[1];
       thirdVal = pattern[2];
 
-      if(gameBoard.getBoard[firstVal] !== 0 && gameBoard.getBoard[secondVal] !== 0 && gameBoard.getBoard[thirdVal] !== 0 ){
+      if(gameBoard.getBoard[firstVal] !== `` && gameBoard.getBoard[secondVal] !== `` && gameBoard.getBoard[thirdVal] !== `` ){
         if(gameBoard.getBoard[firstVal] === gameBoard.getBoard[secondVal] && gameBoard.getBoard[secondVal] === gameBoard.getBoard[thirdVal]){
           winner = true;
+          activePlayer === players[1] ? console.log(`You Won!!!`) : console.log(`Computer Won!!!`);
         }
       }
       }
     );
-
-    if(winner){
-      activePlayer === players[0] ? console.log(`You Won!!!`) : console.log(`Computer Won!!!`);
-    }
   };
 
-  const playRound = () => {
+  const playRound = (click) => {
     if(!winner){
-      if(activePlayer === players[0]){
-        gameBoard.changeValue(playerValue(), activePlayer.symbol);
-        gameBoard.printBoard();
-        getWinner();
+      if(round < 9){
+        if(activePlayer === players[0]){
+          changeValue(click, activePlayer.symbol);
+          render();
+          getWinner();
+          playRound();
+        }
+        else{
+          changeValue(computerValue(), activePlayer.symbol);
+          render();
+          getWinner();
+        }
       }
       else{
-        gameBoard.changeValue(computerValue(), activePlayer.symbol);
-        gameBoard.printBoard();
-        getWinner();
+        console.log(`Its a Tie`);
+        return;
       }
-      switchPlayer();
-      playRound();
     }
     else{
       return;
     }
   };
+  
+  const btnContainer = document.querySelector(`.btn-container`);
 
-  playRound();
+
+  function render () {
+    btnContainer.innerHTML = ``;
+    gameBoard.getBoard.forEach((cell, index) => {
+      const button = document.createElement(`button`);
+      btnContainer.appendChild(button);
+      button.classList.add(`btn`)
+      button.textContent = cell;
+      button.addEventListener(`click`, ()=>{
+        playRound(index);
+      })
+    });
+  };
+
+  render();
 };
 
+GameController();
